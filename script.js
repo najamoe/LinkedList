@@ -12,10 +12,6 @@ class LinkedList {
         this.tail = null;
     }
 
-    add(data){
-        this.head = new Node(data, this.head)
-    }
-
     addFirst(data) {
         this.head = new Node(data, this.head)
     }
@@ -68,7 +64,7 @@ class LinkedList {
             current = current.next;
         }
 
-        return -1; // data not found
+        return -1; // if data is not found
     }
 
     insertAfter(index, data) {
@@ -84,7 +80,6 @@ class LinkedList {
             count++;
             current = current.next;
         }
-        // If index is out of range, you can throw an error or handle it as needed
     }
 
     insertBefore(index, data) {
@@ -107,8 +102,7 @@ class LinkedList {
             previous = current;
             current = current.next;
         }
-        // If index is out of range, you can throw an error or handle it as needed
-    }
+          }
 
     first() {
         return this.head ? this.head.data : null;
@@ -178,7 +172,111 @@ class LinkedList {
             current = current.next;
         }
     }
+    insertAfterNode(payload, existingNode) {
+        if (!existingNode) return; 
+
+        const newNode = new Node(payload);
+        newNode.next = existingNode.next;
+        existingNode.next = newNode;
+    }
+
+    insertBeforeNode(payload, existingNode) {
+        if (!existingNode) return; 
+
+        const newNode = new Node(payload);
+        newNode.next = existingNode;
+        
+        let current = this.head;
+        let previous = null;
+        
+        while (current && current !== existingNode) {
+            previous = current;
+            current = current.next;
+        }
+
+        if (previous) {
+            previous.next = newNode;
+        } else {
+            this.head = newNode;
+        }
+    }
+
+    removeNode(node) {
+        if (!node) return; 
+
+        let current = this.head;
+        let previous = null;
+
+        while (current && current !== node) {
+            previous = current;
+            current = current.next;
+        }
+
+        if (current) {
+            if (previous) {
+                previous.next = current.next;
+            } else {
+                this.head = current.next;
+            }
+        }
+    }
+
+    nodeAt(index) {
+        let current = this.head;
+        let count = 0;
+
+        while (current) {
+            if (count === index) {
+                return current;
+            }
+            count++;
+            current = current.next;
+        }
+
+        return null; // Handle index out of range
+    }
+
+    swapNodes(nodeA, nodeB) {
+        if (!nodeA || !nodeB || nodeA === nodeB) return; 
+
+        let current = this.head;
+        let prevA = null;
+        let prevB = null;
+        let foundA = false;
+        let foundB = false;
+
+        while (current && (!foundA || !foundB)) {
+            if (current.next === nodeA) {
+                prevA = current;
+                foundA = true;
+            }
+            if (current.next === nodeB) {
+                prevB = current;
+                foundB = true;
+            }
+            current = current.next;
+        }
+
+        if (foundA && foundB) {
+            if (prevA) {
+                prevA.next = nodeB;
+            } else {
+                this.head = nodeB;
+            }
+
+            if (prevB) {
+                prevB.next = nodeA;
+            } else {
+                this.head = nodeA;
+            }
+
+            let temp = nodeA.next;
+            nodeA.next = nodeB.next;
+            nodeB.next = temp;
+        }
+    }
 }
+
 
 //Testing for terminal
 
